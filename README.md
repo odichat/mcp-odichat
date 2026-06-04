@@ -8,7 +8,9 @@ A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that e
 - Reports (v1 & v2), Help Center, Automation Rules, Custom Attributes, Custom Filters
 - Proper MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`)
 - Multi-account support (`account_id` is a per-tool argument)
-- stdio transport (compatible with Claude Desktop, ChatGPT, VS Code, and any MCP client)
+- Two transports:
+  - **stdio** — local subprocess (Claude Desktop, VS Code, and any MCP client)
+  - **Streamable HTTP** — remote, hosted server (Claude Web/Desktop/Code, ChatGPT). Stateless; the API token is passed per request via a `?token=` query param
 
 ## Requirements
 
@@ -23,10 +25,13 @@ bun install
 
 ## Environment Variables
 
-| Variable             | Required | Description                                                     |
-| -------------------- | -------- | --------------------------------------------------------------- |
-| `CHATWOOT_BASE_URL`  | Yes      | Your Odichat instance URL (e.g. `https://app.odichat.app`)      |
-| `CHATWOOT_API_TOKEN` | Yes      | API access token (found in Odichat → Profile → Access Token)    |
+| Variable            | Required        | Description                                                                                    |
+| ------------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| `ODICHAT_API_TOKEN` | stdio only      | API access token (found in Odichat → Profile → Access Token). Not used by the HTTP transport.  |
+| `MCP_TRANSPORT`     | No              | Set to `http` to run as a network server. Any other value (or unset) uses stdio.               |
+| `PORT`              | No              | Port for the HTTP transport. Defaults to `3000`.                                               |
+
+> In HTTP mode the token is **not** read from the environment — each client supplies its own token via the `?token=` query param, keeping the server stateless and multi-tenant.
 
 ## Usage
 
@@ -36,11 +41,51 @@ bun install
 bun run dev
 ```
 
-### Production
+### Production (stdio)
 
 ```bash
 bun run start
 ```
+
+### Production (remote HTTP server)
+
+Run the server over HTTP with `Bun.serve()` and the web-standard Streamable HTTP transport:
+
+```bash
+MCP_TRANSPORT=http PORT=3000 bun run src/index.ts
+```
+
+Or with Docker:
+
+```bash
+docker build -t mcp-odichat .
+docker run -p 3000:3000 mcp-odichat
+```
+
+The server is stateless — no database, no sessions. Each request must include the
+caller's Odichat API token as a `?token=` query param. SSL is expected to be
+terminated by an upstream proxy (e.g. Traefik).
+
+Endpoints:
+
+| Method        | Path      | Description                                  |
+| ------------- | --------- | -------------------------------------------- |
+| `POST`/`GET`  | `/mcp`    | MCP Streamable HTTP endpoint                 |
+| `GET`         | `/health` | Health check (returns `ok`)                  |
+
+## Connecting to a hosted server
+
+Point any remote-MCP-capable client (Claude Web/Desktop/Code, ChatGPT) at the
+server URL with your token in the query string:
+
+```
+https://mcp.odichat.app/mcp?token=YOUR_API_TOKEN
+```
+
+1. In Odichat, go to **Profile → Access Token** and copy your token.
+2. Add the URL above (with your token) as the MCP server URL in your AI client.
+
+## Local (stdio) client configuration
 
 ### Claude Desktop Configuration
 
@@ -53,8 +98,7 @@ Add to your `claude_desktop_config.json`:
       "command": "bun",
       "args": ["run", "/path/to/mcp-odichat/src/index.ts"],
       "env": {
-        "CHATWOOT_BASE_URL": "https://your-odichat-instance.com",
-        "CHATWOOT_API_TOKEN": "your-api-token"
+        "ODICHAT_API_TOKEN": "your-api-token"
       }
     }
   }
@@ -72,8 +116,7 @@ Add to your `.vscode/mcp.json`:
       "command": "bun",
       "args": ["run", "${workspaceFolder}/src/index.ts"],
       "env": {
-        "CHATWOOT_BASE_URL": "https://your-odichat-instance.com",
-        "CHATWOOT_API_TOKEN": "your-api-token"
+        "ODICHAT_API_TOKEN": "your-api-token"
       }
     }
   }
@@ -82,7 +125,8 @@ Add to your `.vscode/mcp.json`:
 
 ### ChatGPT Configuration
 
-Add to your ChatGPT MCP settings with the same `CHATWOOT_BASE_URL` and `CHATWOOT_API_TOKEN` environment variables pointing to your Odichat instance.
+ChatGPT connects to remote MCP servers over HTTP — see
+[Connecting to a hosted server](#connecting-to-a-hosted-server) above.
 
 ## Available Tools
 
