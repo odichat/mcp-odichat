@@ -8,7 +8,7 @@ export const register: RegisterFn = (server, client) => {
     "account_get",
     {
       title: "Get Account",
-      description: "Retrieve information about the specified Chatwoot account",
+      description: "Retrieve information about the specified Odichat account",
       inputSchema: { account_id: accountId },
       annotations: { readOnlyHint: true },
     },
@@ -24,7 +24,7 @@ export const register: RegisterFn = (server, client) => {
     "account_update",
     {
       title: "Update Account",
-      description: "Update attributes of the specified Chatwoot account",
+      description: "Update attributes of the specified Odichat account",
       inputSchema: {
         account_id: accountId,
         name: z.string().optional().describe("Account name"),

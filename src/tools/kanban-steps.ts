@@ -11,7 +11,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_steps_list",
     {
       title: "List Kanban Steps",
-      description: "[fazer.ai] List all steps in a kanban board",
+      description: "[Odichat] List all steps in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -30,7 +30,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_steps_create",
     {
       title: "Create Kanban Step",
-      description: "[fazer.ai] Create a new step (column) in a kanban board",
+      description: "[Odichat] Create a new step (column) in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -55,7 +55,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_steps_get",
     {
       title: "Get Kanban Step",
-      description: "[fazer.ai] Get a specific step in a kanban board",
+      description: "[Odichat] Get a specific step in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -77,7 +77,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_steps_update",
     {
       title: "Update Kanban Step",
-      description: "[fazer.ai] Update a step in a kanban board",
+      description: "[Odichat] Update a step in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -104,7 +104,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_steps_delete",
     {
       title: "Delete Kanban Step",
-      description: "[fazer.ai] Delete a step from a kanban board",
+      description: "[Odichat] Delete a step from a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),

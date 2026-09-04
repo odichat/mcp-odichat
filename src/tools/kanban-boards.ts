@@ -10,7 +10,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_list",
     {
       title: "List Kanban Boards",
-      description: "[fazer.ai] List all kanban boards in the account",
+      description: "[Odichat] List all kanban boards in the account",
       inputSchema: {
         account_id: accountId,
         page: z.number().optional().describe("Page number"),
@@ -29,7 +29,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_create",
     {
       title: "Create Kanban Board",
-      description: "[fazer.ai] Create a new kanban board",
+      description: "[Odichat] Create a new kanban board",
       inputSchema: {
         account_id: accountId,
         name: z.string().describe("Board name"),
@@ -48,7 +48,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_get",
     {
       title: "Get Kanban Board",
-      description: "[fazer.ai] Get a specific kanban board",
+      description: "[Odichat] Get a specific kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -67,7 +67,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_update",
     {
       title: "Update Kanban Board",
-      description: "[fazer.ai] Update a kanban board",
+      description: "[Odichat] Update a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -91,7 +91,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_delete",
     {
       title: "Delete Kanban Board",
-      description: "[fazer.ai] Delete a kanban board",
+      description: "[Odichat] Delete a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -110,7 +110,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_boards_update_agents",
     {
       title: "Update Board Agents",
-      description: "[fazer.ai] Update the agents assigned to a kanban board",
+      description: "[Odichat] Update the agents assigned to a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),

@@ -12,7 +12,7 @@ export const register: RegisterFn = (server, client) => {
     {
       title: "List Kanban Audit Events",
       description:
-        "[fazer.ai] List audit events (activity log) for a kanban task",
+        "[Odichat] List audit events (activity log) for a kanban task",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Kanban task ID"),
@@ -32,7 +32,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_audit_events_get",
     {
       title: "Get Kanban Audit Event",
-      description: "[fazer.ai] Get a specific audit event from a kanban task",
+      description: "[Odichat] Get a specific audit event from a kanban task",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Kanban task ID"),

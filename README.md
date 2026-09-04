@@ -1,24 +1,23 @@
-# @fazer-ai/mcp-chatwoot
+# mcp-odichat
 
-[![npm version](https://img.shields.io/npm/v/@fazer-ai/mcp-chatwoot.svg)](https://www.npmjs.com/package/@fazer-ai/mcp-chatwoot)
-[![npm downloads](https://img.shields.io/npm/dm/@fazer-ai/mcp-chatwoot.svg)](https://www.npmjs.com/package/@fazer-ai/mcp-chatwoot)
-
-A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Chatwoot](https://www.chatwoot.com/) API — including [fazer.ai](https://fazer.ai) exclusive features — as **129 tools** for use with AI assistants like Claude, VS Code Copilot, and others.
+A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Odichat](https://odichat.app) API — including Odichat exclusive features — as **123 tools** for use with AI assistants like Claude, ChatGPT, VS Code Copilot, and others.
 
 ## Features
 
-- **129 tools** covering all Chatwoot API endpoints
+- **123 tools** covering all Odichat API endpoints
 - Account, Agents, Contacts, Conversations, Messages, Inboxes, Teams, and more
 - Reports (v1 & v2), Help Center, Automation Rules, Custom Attributes, Custom Filters
-- **[fazer.ai] exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Kanban Preferences, Scheduled Messages
+- **Odichat exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Scheduled Messages
 - Proper MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`)
 - Multi-account support (`account_id` is a per-tool argument)
-- stdio transport (compatible with Claude Desktop, VS Code, and any MCP client)
+- Two transports:
+  - **stdio** — local subprocess (Claude Desktop, VS Code, and any MCP client)
+  - **Streamable HTTP** — remote, hosted server (Claude Web/Desktop/Code, ChatGPT). Stateless; the API token is passed per request via a `?token=` query param
 
 ## Requirements
 
 - [Bun](https://bun.sh/) v1.0+
-- A Chatwoot instance with API access
+- An Odichat instance with API access
 
 ## Installation
 
@@ -28,10 +27,13 @@ bun install
 
 ## Environment Variables
 
-| Variable             | Required | Description                                                   |
-| -------------------- | -------- | ------------------------------------------------------------- |
-| `CHATWOOT_BASE_URL`  | Yes      | Your Chatwoot instance URL (e.g. `https://app.chatwoot.com`)  |
-| `CHATWOOT_API_TOKEN` | Yes      | API access token (found in Chatwoot → Profile → Access Token) |
+| Variable            | Required        | Description                                                                                    |
+| ------------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| `ODICHAT_API_TOKEN` | stdio only      | API access token (found in Odichat → Profile → Access Token). Not used by the HTTP transport.  |
+| `MCP_TRANSPORT`     | No              | Set to `http` to run as a network server. Any other value (or unset) uses stdio.               |
+| `PORT`              | No              | Port for the HTTP transport. Defaults to `3000`.                                               |
+
+> In HTTP mode the token is **not** read from the environment — each client supplies its own token via the `?token=` query param, keeping the server stateless and multi-tenant.
 
 ## Usage
 
@@ -41,11 +43,51 @@ bun install
 bun run dev
 ```
 
-### Production
+### Production (stdio)
 
 ```bash
 bun run start
 ```
+
+### Production (remote HTTP server)
+
+Run the server over HTTP with `Bun.serve()` and the web-standard Streamable HTTP transport:
+
+```bash
+MCP_TRANSPORT=http PORT=3000 bun run src/index.ts
+```
+
+Or with Docker:
+
+```bash
+docker build -t mcp-odichat .
+docker run -p 3000:3000 mcp-odichat
+```
+
+The server is stateless — no database, no sessions. Each request must include the
+caller's Odichat API token as a `?token=` query param. SSL is expected to be
+terminated by an upstream proxy (e.g. Traefik).
+
+Endpoints:
+
+| Method        | Path      | Description                                  |
+| ------------- | --------- | -------------------------------------------- |
+| `POST`/`GET`  | `/mcp`    | MCP Streamable HTTP endpoint                 |
+| `GET`         | `/health` | Health check (returns `ok`)                  |
+
+## Connecting to a hosted server
+
+Point any remote-MCP-capable client (Claude Web/Desktop/Code, ChatGPT) at the
+server URL with your token in the query string:
+
+```
+https://mcp.odichat.app/mcp?token=YOUR_API_TOKEN
+```
+
+1. In Odichat, go to **Profile → Access Token** and copy your token.
+2. Add the URL above (with your token) as the MCP server URL in your AI client.
+
+## Local (stdio) client configuration
 
 ### Claude Desktop Configuration
 
@@ -54,12 +96,11 @@ Add to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "chatwoot": {
+    "odichat": {
       "command": "bun",
-      "args": ["run", "/path/to/mcp-chatwoot/src/index.ts"],
+      "args": ["run", "/path/to/mcp-odichat/src/index.ts"],
       "env": {
-        "CHATWOOT_BASE_URL": "https://your-chatwoot-instance.com",
-        "CHATWOOT_API_TOKEN": "your-api-token"
+        "ODICHAT_API_TOKEN": "your-api-token"
       }
     }
   }
@@ -73,19 +114,23 @@ Add to your `.vscode/mcp.json`:
 ```json
 {
   "servers": {
-    "chatwoot": {
+    "odichat": {
       "command": "bun",
       "args": ["run", "${workspaceFolder}/src/index.ts"],
       "env": {
-        "CHATWOOT_BASE_URL": "https://your-chatwoot-instance.com",
-        "CHATWOOT_API_TOKEN": "your-api-token"
+        "ODICHAT_API_TOKEN": "your-api-token"
       }
     }
   }
 }
 ```
 
-## Available Tools (129)
+### ChatGPT Configuration
+
+ChatGPT connects to remote MCP servers over HTTP — see
+[Connecting to a hosted server](#connecting-to-a-hosted-server) above.
+
+## Available Tools (123)
 
 ### Account (2)
 
@@ -143,7 +188,7 @@ Add to your `.vscode/mcp.json`:
 
 `help_center_portals_list`, `help_center_portals_create`, `help_center_portals_update`, `help_center_categories_create`, `help_center_articles_create`
 
-### Inboxes (11)
+### Inboxes (10)
 
 `inboxes_list`, `inboxes_get`, `inboxes_create`, `inboxes_update`, `inboxes_get_agent_bot`, `inboxes_set_agent_bot`, `inbox_members_list`, `inbox_members_create`, `inbox_members_update`, `inbox_members_delete`
 
@@ -167,27 +212,23 @@ Add to your `.vscode/mcp.json`:
 
 `webhooks_list`, `webhooks_create`, `webhooks_update`, `webhooks_delete`
 
-### Kanban Boards (9) — [fazer.ai]
+### Kanban Boards (6) — [Odichat]
 
-`kanban_boards_list`, `kanban_boards_create`, `kanban_boards_get`, `kanban_boards_update`, `kanban_boards_delete`, `kanban_boards_get_automation_settings`, `kanban_boards_update_automation_settings`, `kanban_boards_get_members`, `kanban_boards_set_members`
+`kanban_boards_list`, `kanban_boards_create`, `kanban_boards_get`, `kanban_boards_update`, `kanban_boards_delete`, `kanban_boards_update_agents`
 
-### Kanban Steps (5) — [fazer.ai]
+### Kanban Steps (5) — [Odichat]
 
 `kanban_steps_list`, `kanban_steps_create`, `kanban_steps_get`, `kanban_steps_update`, `kanban_steps_delete`
 
-### Kanban Tasks (7) — [fazer.ai]
+### Kanban Tasks (6) — [Odichat]
 
 `kanban_tasks_list`, `kanban_tasks_create`, `kanban_tasks_get`, `kanban_tasks_update`, `kanban_tasks_delete`, `kanban_tasks_move`
 
-### Kanban Audit Events (2) — [fazer.ai]
+### Kanban Audit Events (2) — [Odichat]
 
 `kanban_audit_events_list`, `kanban_audit_events_get`
 
-### Kanban Preferences (1) — [fazer.ai]
-
-`kanban_preferences_get`
-
-### Scheduled Messages (4) — [fazer.ai]
+### Scheduled Messages (4) — [Odichat]
 
 `scheduled_messages_list`, `scheduled_messages_create`, `scheduled_messages_update`, `scheduled_messages_delete`
 

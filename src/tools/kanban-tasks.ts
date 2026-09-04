@@ -11,7 +11,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_tasks_list",
     {
       title: "List Kanban Tasks",
-      description: "[fazer.ai] List tasks in a kanban board",
+      description: "[Odichat] List tasks in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().optional().describe("Filter by kanban board ID"),
@@ -32,7 +32,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_tasks_create",
     {
       title: "Create Kanban Task",
-      description: "[fazer.ai] Create a new task in a kanban board",
+      description: "[Odichat] Create a new task in a kanban board",
       inputSchema: {
         account_id: accountId,
         board_id: z.number().describe("Kanban board ID"),
@@ -66,7 +66,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_tasks_get",
     {
       title: "Get Kanban Task",
-      description: "[fazer.ai] Get a specific task",
+      description: "[Odichat] Get a specific task",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Task ID"),
@@ -85,7 +85,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_tasks_update",
     {
       title: "Update Kanban Task",
-      description: "[fazer.ai] Update a kanban task",
+      description: "[Odichat] Update a kanban task",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Task ID"),
@@ -126,7 +126,7 @@ export const register: RegisterFn = (server, client) => {
     "kanban_tasks_delete",
     {
       title: "Delete Kanban Task",
-      description: "[fazer.ai] Delete a kanban task",
+      description: "[Odichat] Delete a kanban task",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Task ID"),
@@ -146,7 +146,7 @@ export const register: RegisterFn = (server, client) => {
     {
       title: "Move Kanban Task",
       description:
-        "[fazer.ai] Move a kanban task to a different step and/or position",
+        "[Odichat] Move a kanban task to a different step and/or position",
       inputSchema: {
         account_id: accountId,
         task_id: z.number().describe("Task ID"),

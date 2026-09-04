@@ -11,7 +11,7 @@ export const register: RegisterFn = (server, client) => {
     "scheduled_messages_list",
     {
       title: "List Scheduled Messages",
-      description: "[fazer.ai] List scheduled messages for a conversation",
+      description: "[Odichat] List scheduled messages for a conversation",
       inputSchema: {
         account_id: accountId,
         conversation_id: z.number().describe("Conversation ID"),
@@ -31,7 +31,7 @@ export const register: RegisterFn = (server, client) => {
     {
       title: "Create Scheduled Message",
       description:
-        "[fazer.ai] Schedule a message to be sent later in a conversation",
+        "[Odichat] Schedule a message to be sent later in a conversation",
       inputSchema: {
         account_id: accountId,
         conversation_id: z.number().describe("Conversation ID"),
@@ -57,7 +57,7 @@ export const register: RegisterFn = (server, client) => {
     "scheduled_messages_update",
     {
       title: "Update Scheduled Message",
-      description: "[fazer.ai] Update a scheduled message",
+      description: "[Odichat] Update a scheduled message",
       inputSchema: {
         account_id: accountId,
         conversation_id: z.number().describe("Conversation ID"),
@@ -82,7 +82,7 @@ export const register: RegisterFn = (server, client) => {
     "scheduled_messages_delete",
     {
       title: "Delete Scheduled Message",
-      description: "[fazer.ai] Delete a scheduled message",
+      description: "[Odichat] Delete a scheduled message",
       inputSchema: {
         account_id: accountId,
         conversation_id: z.number().describe("Conversation ID"),

@@ -14,7 +14,7 @@ describe("Server", () => {
     expect(server).toBeDefined();
   });
 
-  test("registers all 129 tools", () => {
+  test("registers all 123 tools", () => {
     const client = new ChatwootClient(
       "https://chatwoot.example.com",
       "test-token",
@@ -26,7 +26,7 @@ describe("Server", () => {
     expect(Object.keys(tools).length).toBe(123);
   });
 
-  test("has fazer.ai exclusive tools", () => {
+  test("has Odichat exclusive tools", () => {
     const client = new ChatwootClient(
       "https://chatwoot.example.com",
       "test-token",

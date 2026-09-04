@@ -1,11 +1,7 @@
 {
-  "name": "@fazer-ai/mcp-chatwoot",
+  "name": "mcp-odichat",
   "version": "0.0.0",
-  "description": "MCP server for the Chatwoot API (fazer.ai fork) — provides tools for managing conversations, contacts, inboxes, teams, kanban boards, and more.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fazer-ai/mcp-chatwoot"
-  },
+  "description": "MCP server for the Odichat API — provides tools for managing conversations, contacts, inboxes, teams, kanban boards, and more.",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -13,11 +9,10 @@
   },
   "keywords": [
     "mcp",
-    "mcp-chatwoot",
+    "mcp-odichat",
     "modelcontextprotocol",
     "claude",
-    "chatwoot",
-    "fazer-ai"
+    "odichat"
   ],
   "module": "src/index.ts",
   "main": "dist/index.js",
