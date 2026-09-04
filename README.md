@@ -1,11 +1,13 @@
 # mcp-odichat
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Odichat](https://odichat.app) API as tools for use with AI assistants like Claude, ChatGPT, VS Code Copilot, and others.
+A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Odichat](https://odichat.app) API — including Odichat exclusive features — as **123 tools** for use with AI assistants like Claude, ChatGPT, VS Code Copilot, and others.
 
 ## Features
 
+- **123 tools** covering all Odichat API endpoints
 - Account, Agents, Contacts, Conversations, Messages, Inboxes, Teams, and more
 - Reports (v1 & v2), Help Center, Automation Rules, Custom Attributes, Custom Filters
+- **Odichat exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Scheduled Messages
 - Proper MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`)
 - Multi-account support (`account_id` is a per-tool argument)
 - Two transports:
@@ -128,7 +130,7 @@ Add to your `.vscode/mcp.json`:
 ChatGPT connects to remote MCP servers over HTTP — see
 [Connecting to a hosted server](#connecting-to-a-hosted-server) above.
 
-## Available Tools
+## Available Tools (123)
 
 ### Account (2)
 
@@ -209,6 +211,26 @@ ChatGPT connects to remote MCP servers over HTTP — see
 ### Webhooks (4)
 
 `webhooks_list`, `webhooks_create`, `webhooks_update`, `webhooks_delete`
+
+### Kanban Boards (6) — [Odichat]
+
+`kanban_boards_list`, `kanban_boards_create`, `kanban_boards_get`, `kanban_boards_update`, `kanban_boards_delete`, `kanban_boards_update_agents`
+
+### Kanban Steps (5) — [Odichat]
+
+`kanban_steps_list`, `kanban_steps_create`, `kanban_steps_get`, `kanban_steps_update`, `kanban_steps_delete`
+
+### Kanban Tasks (6) — [Odichat]
+
+`kanban_tasks_list`, `kanban_tasks_create`, `kanban_tasks_get`, `kanban_tasks_update`, `kanban_tasks_delete`, `kanban_tasks_move`
+
+### Kanban Audit Events (2) — [Odichat]
+
+`kanban_audit_events_list`, `kanban_audit_events_get`
+
+### Scheduled Messages (4) — [Odichat]
+
+`scheduled_messages_list`, `scheduled_messages_create`, `scheduled_messages_update`, `scheduled_messages_delete`
 
 ## Development
 

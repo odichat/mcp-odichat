@@ -16,9 +16,14 @@ import { register as registerCustomFilters } from "./custom-filters.ts";
 import { register as registerHelpCenter } from "./help-center.ts";
 import { register as registerInboxes } from "./inboxes.ts";
 import { register as registerIntegrations } from "./integrations.ts";
+import { register as registerKanbanAuditEvents } from "./kanban-audit-events.ts";
+import { register as registerKanbanBoards } from "./kanban-boards.ts";
+import { register as registerKanbanSteps } from "./kanban-steps.ts";
+import { register as registerKanbanTasks } from "./kanban-tasks.ts";
 import { register as registerMessages } from "./messages.ts";
 import { register as registerProfile } from "./profile.ts";
 import { register as registerReports } from "./reports.ts";
+import { register as registerScheduledMessages } from "./scheduled-messages.ts";
 import { register as registerTeams } from "./teams.ts";
 import { register as registerWebhooks } from "./webhooks.ts";
 
@@ -38,9 +43,14 @@ const registrations = [
   registerHelpCenter,
   registerInboxes,
   registerIntegrations,
+  registerKanbanAuditEvents,
+  registerKanbanBoards,
+  registerKanbanSteps,
+  registerKanbanTasks,
   registerMessages,
   registerProfile,
   registerReports,
+  registerScheduledMessages,
   registerTeams,
   registerWebhooks,
 ];

@@ -1,7 +1,7 @@
 {
   "name": "mcp-odichat",
   "version": "0.0.0",
-  "description": "MCP server for the Odichat API — provides tools for managing conversations, contacts, inboxes, teams, and more.",
+  "description": "MCP server for the Odichat API — provides tools for managing conversations, contacts, inboxes, teams, kanban boards, and more.",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -12,8 +12,7 @@
     "mcp-odichat",
     "modelcontextprotocol",
     "claude",
-    "odichat",
-    "chatwoot"
+    "odichat"
   ],
   "module": "src/index.ts",
   "main": "dist/index.js",
