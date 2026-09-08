@@ -42,7 +42,12 @@ describe("Server", () => {
     expect(tools.kanban_tasks_list).toBeDefined();
     expect(tools.kanban_audit_events_list).toBeDefined();
 
-    // Scheduled messages
+    // Scheduled messages, including the template-backed tools
     expect(tools.scheduled_messages_list).toBeDefined();
+    expect(tools.scheduled_messages_create_from_template).toBeDefined();
+    expect(tools.scheduled_messages_create_call_reminders).toBeDefined();
+
+    // Message templates
+    expect(tools.message_templates_list).toBeDefined();
   });
 });

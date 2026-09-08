@@ -7,7 +7,7 @@ A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that e
 - **123 tools** covering all Odichat API endpoints
 - Account, Agents, Contacts, Conversations, Messages, Inboxes, Teams, and more
 - Reports (v1 & v2), Help Center, Automation Rules, Custom Attributes, Custom Filters
-- **Odichat exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Scheduled Messages
+- **Odichat exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Scheduled Messages, Message Templates
 - Proper MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`)
 - Multi-account support (`account_id` is a per-tool argument)
 - Two transports:
@@ -130,7 +130,7 @@ Add to your `.vscode/mcp.json`:
 ChatGPT connects to remote MCP servers over HTTP — see
 [Connecting to a hosted server](#connecting-to-a-hosted-server) above.
 
-## Available Tools (123)
+## Available Tools (126)
 
 ### Account (2)
 
@@ -228,9 +228,71 @@ ChatGPT connects to remote MCP servers over HTTP — see
 
 `kanban_audit_events_list`, `kanban_audit_events_get`
 
-### Scheduled Messages (4) — [Odichat]
+### Scheduled Messages (6) — [Odichat]
 
-`scheduled_messages_list`, `scheduled_messages_create`, `scheduled_messages_update`, `scheduled_messages_delete`
+`scheduled_messages_list`, `scheduled_messages_create`, `scheduled_messages_update`, `scheduled_messages_delete`, `scheduled_messages_create_from_template`, `scheduled_messages_create_call_reminders`
+
+### Message Templates (1) — [Odichat]
+
+`message_templates_list`
+
+## WhatsApp template scheduled messages
+
+`scheduled_messages_create_from_template` schedules an approved WhatsApp
+template message, and `scheduled_messages_create_call_reminders` schedules a
+booked call's two reminders in one call. A few things are worth knowing.
+
+**Templates are per inbox.** `message_templates_list` needs an `inbox_id`. The
+two scheduling tools derive it from the conversation instead — a conversation
+belongs to exactly one inbox, so they take no `inbox_id` of their own.
+
+**Twilio-backed inboxes only.** `Channel::TwilioSms` inboxes return Twilio
+Content API templates, which these tools understand. Native `Channel::Whatsapp`
+inboxes return the Meta Graph shape instead; pointing a scheduling tool at one
+fails with an error naming the inbox and its channel type.
+
+**Only approved templates can be sent.** The API returns unapproved templates
+too, so an unknown name reports whether the template is missing or merely
+unapproved, and lists the approved names either way.
+
+**Two different curly-brace syntaxes are in play.** `{{1}}`, `{{2}}` … in a
+template body are Twilio/Meta placeholders; `{{contact.name}}` and friends are
+Chatwoot's own Liquid drops, resolved server-side. `{{1}}` is the contact's name
+and is filled in automatically — passing `"1"` in `extra_params` is an error.
+`{{2}}` and up have no Chatwoot equivalent and must be supplied as literal,
+pre-formatted values:
+
+```jsonc
+{
+  "account_id": 1,
+  "conversation_id": 163,        // display_id, not the internal database id
+  "template_name": "call_reminder_1h",
+  "scheduled_at": "2026-09-09T15:30:00Z",
+  "extra_params": { "2": "10:00 AM" }
+}
+```
+
+**Call reminders take a naive local time plus an IANA timezone.** Translate the
+contact's country or city into an identifier before calling — the tool validates
+the identifier but never guesses one:
+
+```jsonc
+{
+  "account_id": 1,
+  "conversation_id": 163,
+  "call_time_local": "2026-09-09T10:00",   // no offset, no trailing Z
+  "iana_timezone": "America/Caracas"
+}
+```
+
+That schedules `call_reminder_1h` an hour before and `call_ongoing_now` at the
+call time. If the call is under an hour away the first is skipped and the second
+is still created — a reported outcome, not an error. The no-show follow-up is
+never scheduled; a human sends that one.
+
+**`conversation_id` is the `display_id`.** Every scheduled-message path takes the
+number shown in the Odichat UI and in conversation URLs, not the conversation's
+internal `database_id` — posting with the internal id returns 404.
 
 ## Development
 
