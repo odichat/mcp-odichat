@@ -6,6 +6,7 @@ import { register as registerAgentBots } from "./agent-bots.ts";
 import { register as registerAgents } from "./agents.ts";
 import { register as registerAuditLogs } from "./audit-logs.ts";
 import { register as registerAutomationRules } from "./automation-rules.ts";
+import { register as registerCallReminders } from "./call-reminders.ts";
 import { register as registerCannedResponses } from "./canned-responses.ts";
 import { register as registerContactLabels } from "./contact-labels.ts";
 import { register as registerContacts } from "./contacts.ts";
@@ -34,6 +35,7 @@ const registrations = [
   registerAgents,
   registerAuditLogs,
   registerAutomationRules,
+  registerCallReminders,
   registerCannedResponses,
   registerContactLabels,
   registerContacts,
