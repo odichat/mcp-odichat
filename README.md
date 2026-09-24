@@ -130,7 +130,7 @@ Add to your `.vscode/mcp.json`:
 ChatGPT connects to remote MCP servers over HTTP — see
 [Connecting to a hosted server](#connecting-to-a-hosted-server) above.
 
-## Available Tools (126)
+## Available Tools (130)
 
 ### Account (2)
 
@@ -159,6 +159,10 @@ ChatGPT connects to remote MCP servers over HTTP — see
 ### Contacts (11)
 
 `contacts_list`, `contacts_create`, `contacts_get`, `contacts_update`, `contacts_delete`, `contacts_conversations`, `contacts_search`, `contacts_filter`, `contacts_create_contact_inbox`, `contacts_contactable_inboxes`, `contacts_merge`
+
+### Labels (4)
+
+`labels_list`, `labels_create`, `labels_update`, `labels_delete`
 
 ### Contact Labels (2)
 

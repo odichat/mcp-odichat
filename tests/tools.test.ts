@@ -305,6 +305,59 @@ describe("scheduled_messages_create_call_reminders", () => {
   });
 });
 
+describe("request bodies the Rails API requires wrapped", () => {
+  let h: ReturnType<typeof harness>;
+
+  beforeEach(() => {
+    h = harness();
+  });
+
+  test("labels_create wraps the body in `label`", async () => {
+    await h.call("labels_create", {
+      account_id: 7,
+      title: "motos",
+      color: "#ef4444",
+    });
+
+    const post = h.writes()[0];
+    expect(post?.url).toEndWith("/accounts/7/labels");
+    expect(post?.body).toEqual({ label: { title: "motos", color: "#ef4444" } });
+  });
+
+  test("labels_update wraps the body in `label` and keeps the id in the path", async () => {
+    await h.call("labels_update", { account_id: 7, id: 3, color: "#000000" });
+
+    const patch = h.requests.find((r) => r.method === "PATCH");
+    expect(patch?.url).toEndWith("/accounts/7/labels/3");
+    expect(patch?.body).toEqual({ label: { color: "#000000" } });
+  });
+
+  test("kanban_steps_create wraps the body in `step`", async () => {
+    await h.call("kanban_steps_create", {
+      account_id: 7,
+      board_id: 12,
+      name: "Nuevo",
+    });
+
+    const post = h.writes()[0];
+    expect(post?.url).toEndWith("/accounts/7/kanban/boards/12/steps");
+    expect(post?.body).toEqual({ step: { name: "Nuevo" } });
+  });
+
+  test("kanban_steps_update wraps the body in `step`", async () => {
+    await h.call("kanban_steps_update", {
+      account_id: 7,
+      board_id: 12,
+      step_id: 72,
+      name: "Nuevo lead",
+    });
+
+    const patch = h.requests.find((r) => r.method === "PATCH");
+    expect(patch?.url).toEndWith("/accounts/7/kanban/boards/12/steps/72");
+    expect(patch?.body).toEqual({ step: { name: "Nuevo lead" } });
+  });
+});
+
 describe("message_templates_list", () => {
   test("requires an explicit inbox_id, having no conversation to derive one from", () => {
     expect(paramsOf("message_templates_list")).toContain("inbox_id");
