@@ -44,7 +44,9 @@ export const register: RegisterFn = (server, client) => {
       },
     },
     async ({ account_id, board_id, ...body }) => {
-      const result = await client.post(base(account_id, board_id), body);
+      const result = await client.post(base(account_id, board_id), {
+        step: body,
+      });
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
       };
@@ -92,7 +94,7 @@ export const register: RegisterFn = (server, client) => {
     async ({ account_id, board_id, step_id, ...body }) => {
       const result = await client.patch(
         `${base(account_id, board_id)}/${step_id}`,
-        body,
+        { step: body },
       );
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
