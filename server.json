@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.odichat/mcp-odichat",
+  "title": "Odichat",
+  "description": "Manage your Odichat WhatsApp/IG/FB inbox from Claude — conversations, contacts, pipeline, reports.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/odichat/mcp-odichat",
+    "source": "github"
+  },
+  "websiteUrl": "https://odichat.app/blog/odichat-mcp-claude",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.odichat.app/mcp?token={token}",
+      "variables": {
+        "token": {
+          "description": "Your personal Odichat access token (Profile → Access Token in your Odichat account)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      }
+    }
+  ]
+}
