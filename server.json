@@ -15,7 +15,7 @@
       "url": "https://mcp.odichat.app/mcp?token={token}",
       "variables": {
         "token": {
-          "description": "Your personal Odichat access token (Profile → Access Token in your Odichat account)",
+          "description": "Your personal Odichat access token (Profile → Access Token in your Odichat account).",
           "isRequired": true,
           "isSecret": true
         }
